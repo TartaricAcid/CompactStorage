@@ -27,7 +27,7 @@ if(System.getenv("BUILD_NUMBER") != null)
     ext.bambooBuildNumber = System.getenv("BUILD_NUMBER");
 }
 
-apply from: 'https://raw.githubusercontent.com/BuiltBrokenModding/BuiltBrokenScripts/buildScripts/index.gradle'
+apply from: 'https://raw.githubusercontent.com/BuiltBrokenModding/BuiltBrokenScripts/1.8/index.gradle'
 apply plugin: 'forge'
 
 group= "com.tattyseal.compactstorage"
