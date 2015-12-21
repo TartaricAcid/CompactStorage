@@ -69,53 +69,9 @@ public class BlockChest extends Block implements ITileEntityProvider
         TileEntityChest chest = ((TileEntityChest) world.getTileEntity(pos));
 
         chest.direction = EntityUtil.get2dOrientation(entity);
-        
-        if(stack.hasTagCompound() && stack.getTagCompound().hasKey("size"))
-        {
-        	if(stack.getTagCompound().getTag("size") instanceof NBTTagIntArray)
-        	{
-                chest.invX = stack.getTagCompound().getIntArray("size")[0];
-                chest.invY = stack.getTagCompound().getIntArray("size")[1];
-
-                if(stack.getTagCompound().hasKey("color"))
-                {
-                    chest.color = Integer.decode(stack.getTagCompound().getString("color"));
-                }
-                else
-                {
-                    chest.color = 0xffffff;
-                }
-
-                chest.items = new ItemStack[chest.invX * chest.invY];
-        	}
-        	else
-        	{
-        		if(entity instanceof EntityPlayer)
-        		{
-        			((EntityPlayer) entity).addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "You attempted something bad! :("));
-
-                    chest.invX = 9;
-                    chest.invY = 3;
-                    chest.items = new ItemStack[chest.invX * chest.invY];
-                    chest.color = 0xFFFFFF;
-
-        			InvalidSizeException exception = new InvalidSizeException("You tried to pass off a " + stack.getTagCompound().getTag("size").getClass().getName() + " as a Integer Array. Do not report this or you will be ignored. This is a user based error.");
-        			exception.printStackTrace();
-        		}
-        	}
-        }
-        else
-        {
-            if(entity instanceof EntityPlayer)
-            {
-                ((EntityPlayer) entity).addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "You attempted something bad! :("));
-
-                chest.invX = 9;
-                chest.invY = 3;
-                chest.items = new ItemStack[chest.invX * chest.invY];
-                chest.color = 0xFFFFFF;
-            }
-        }
+        chest.invX = 9;
+        chest.invY = 3;
+        chest.color = 0xffffff;
     }
     
     @Override
@@ -150,15 +106,6 @@ public class BlockChest extends Block implements ITileEntityProvider
             ItemStack stack = new ItemStack(CompactStorage.chest, 1);
             Random rand = new Random();
 
-            stack.setTagCompound(new NBTTagCompound());
-
-            int invX = chest.invX;
-            int invY = chest.invY;
-            int color = chest.color;
-
-            stack.getTagCompound().setIntArray("size", new int[]{invX, invY});
-            stack.getTagCompound().setInteger("color", color);
-
             world.spawnEntityInWorld(new EntityItem(world, pos.getX(), pos.getY() + 0.5f, pos.getZ(), stack));
 
             for(int slot = 0; slot < chest.items.length; slot++)
@@ -171,24 +118,6 @@ public class BlockChest extends Block implements ITileEntityProvider
         }
 
         super.breakBlock(world, pos, block);
-    }
-
-    @Override
-    public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player)
-    {
-        return getPickBlock(target, world, pos);
-    }
-
-    @Override
-    public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos)
-    {
-        ItemStack stack = new ItemStack(CompactStorage.chest, 1);
-        TileEntityChest chest = (TileEntityChest) world.getTileEntity(pos);
-
-        stack.setTagCompound(new NBTTagCompound());
-        stack.getTagCompound().setIntArray("size", new int[] {chest.invX, chest.invY});
-
-        return stack;
     }
 
     @Override

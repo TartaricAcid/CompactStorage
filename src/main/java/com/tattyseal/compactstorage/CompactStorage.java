@@ -11,7 +11,6 @@ import com.tattyseal.compactstorage.command.CommandCompactStorage;
 import com.tattyseal.compactstorage.compat.ICompat;
 import com.tattyseal.compactstorage.creativetabs.CreativeTabCompactStorage;
 import com.tattyseal.compactstorage.item.ItemBackpack;
-import com.tattyseal.compactstorage.item.ItemBlockChest;
 import com.tattyseal.compactstorage.network.HandlerApplyChestUpdate;
 import com.tattyseal.compactstorage.network.PacketApplyChestUpdate;
 import com.tattyseal.compactstorage.proxy.IProxy;
@@ -19,7 +18,10 @@ import com.tattyseal.compactstorage.tileentity.TileEntityChest;
 
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -34,6 +36,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.oredict.OreDictionary;
 
 /**
  * Created by Toby on 06/11/2014.
@@ -81,13 +84,16 @@ public class CompactStorage
         wrapper.registerMessage(HandlerApplyChestUpdate.class, PacketApplyChestUpdate.class, 0, Side.SERVER);
         
         chest = new BlockChest();
-        GameRegistry.registerBlock(chest, ItemBlockChest.class, "compactChest");
+        GameRegistry.registerBlock(chest, "compactChest");
         GameRegistry.registerTileEntity(TileEntityChest.class, "tileChest");
 
         backpack = new ItemBackpack();
         GameRegistry.registerItem(backpack, "backpack");
         
         ConfigurationHandler.configFile = event.getSuggestedConfigurationFile();
+        
+        GameRegistry.addShapedRecipe(new ItemStack(chest, 1), "XXX", "XIX", "XXX", 'X', new ItemStack(Blocks.planks, 1, OreDictionary.WILDCARD_VALUE), 'I', new ItemStack(Items.iron_ingot, 1));
+        GameRegistry.addShapedRecipe(new ItemStack(backpack, 1), "XXX", "XIX", "XXX", 'X', new ItemStack(Items.string, 1), 'I', new ItemStack(Items.iron_ingot, 1));
     }
 
     @EventHandler
