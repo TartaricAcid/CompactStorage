@@ -1,21 +1,19 @@
 package com.tattyseal.compactstorage.inventory;
 
+import com.tattyseal.compactstorage.api.IChest;
 import com.tattyseal.compactstorage.client.gui.slot.SlotChangePosition;
 import com.tattyseal.compactstorage.client.gui.slot.SlotMaterial;
-import invtweaks.api.container.ChestContainer;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
-
-import com.tattyseal.compactstorage.api.IChest;
-import com.tattyseal.compactstorage.util.BlockPos;
 
 /**
  * Created by Toby on 11/11/2014.
  */
-@ChestContainer(showButtons = true, isLargeChest = false)
 public class ContainerChest extends Container
 {
     public World world;
@@ -149,7 +147,6 @@ public class ContainerChest extends Container
     	}
     }
     
-    @ChestContainer.RowSizeCallback
     public int getInvX()
     {
     	return invX;
@@ -163,7 +160,7 @@ public class ContainerChest extends Container
     @Override
     public void onContainerClosed(EntityPlayer player)
     {
-        chest.closeInventory();
+        chest.closeInventory(player);
 
         if(!world.isRemote)
         {

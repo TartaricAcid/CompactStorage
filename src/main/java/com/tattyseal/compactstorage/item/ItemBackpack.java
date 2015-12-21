@@ -17,7 +17,6 @@ public class ItemBackpack extends Item
     public ItemBackpack()
     {
         super();
-        setTextureName("compactstorage:backpack");
         setUnlocalizedName("backpack");
         setCreativeTab(CompactStorage.tabCS);
         setMaxStackSize(1);

@@ -10,6 +10,7 @@ import com.tattyseal.compactstorage.util.EntityUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,10 +19,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 /**
@@ -32,26 +34,13 @@ public class BlockChest extends Block implements ITileEntityProvider
     public BlockChest()
     {
         super(Material.wood);
-        setBlockName("compactchest");
-        setBlockTextureName("planks_oak");
+        setUnlocalizedName("compactchest");
         setCreativeTab(CompactStorage.tabCS);
 
         setHardness(2F);
         setResistance(2F);
         setHarvestLevel("axe", 1);
         setBlockBounds(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
-    }
-
-    @Override
-    public int colorMultiplier(IBlockAccess world, int x, int y, int z)
-    {
-        return 0xFFFFFF;
-    }
-
-    @Override
-    public boolean renderAsNormalBlock()
-    {
-        return false;
     }
 
     @Override
@@ -67,11 +56,11 @@ public class BlockChest extends Block implements ITileEntityProvider
     }
 
     @Override
-    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack stack)
+    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase entity, ItemStack stack)
     {
-        super.onBlockPlacedBy(world, x, y, z, entity, stack);
+        super.onBlockPlacedBy(world, pos, state, entity, stack);
 
-        TileEntityChest chest = ((TileEntityChest) world.getTileEntity(x, y, z));
+        TileEntityChest chest = ((TileEntityChest) world.getTileEntity(pos));
 
         chest.direction = EntityUtil.get2dOrientation(entity);
         
@@ -122,16 +111,16 @@ public class BlockChest extends Block implements ITileEntityProvider
             }
         }
     }
-
+    
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int i, float j, float k, float l)
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
         if(!player.isSneaking())
         {
             if(!world.isRemote)
             {
-                world.playSoundEffect(x, y, z, "random.chestopen", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
-                player.openGui(CompactStorage.instance, 0, world, x, y, z);
+                world.playSoundEffect(pos.getX(), pos.getY(), pos.getZ(), "random.chestopen", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
+                player.openGui(CompactStorage.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
             }
 
             return true;
@@ -146,9 +135,9 @@ public class BlockChest extends Block implements ITileEntityProvider
     }
 
     @Override
-    public void breakBlock(World world, int x, int y, int z, Block block, int meta)
+    public void breakBlock(World world, BlockPos pos, IBlockState block)
     {
-        TileEntityChest chest = (TileEntityChest) world.getTileEntity(x, y, z);
+        TileEntityChest chest = (TileEntityChest) world.getTileEntity(pos);
 
         if(chest != null)
         {
@@ -164,31 +153,31 @@ public class BlockChest extends Block implements ITileEntityProvider
             stack.getTagCompound().setIntArray("size", new int[]{invX, invY});
             stack.getTagCompound().setInteger("color", color);
 
-            world.spawnEntityInWorld(new EntityItem(world, x, y + 0.5f, z, stack));
+            world.spawnEntityInWorld(new EntityItem(world, pos.getX(), pos.getY() + 0.5f, pos.getZ(), stack));
 
             for(int slot = 0; slot < chest.items.length; slot++)
             {
                 float randX = rand.nextFloat();
                 float randZ = rand.nextFloat();
 
-                if(chest.items != null && chest.items[slot] != null) world.spawnEntityInWorld(new EntityItem(world, x + randX, y + 0.5f, z + randZ, chest.items[slot]));
+                if(chest.items != null && chest.items[slot] != null) world.spawnEntityInWorld(new EntityItem(world, pos.getX() + randX, pos.getY() + 0.5f, pos.getZ() + randZ, chest.items[slot]));
             }
         }
 
-        super.breakBlock(world, x, y, z, block, meta);
+        super.breakBlock(world, pos, block);
     }
 
     @Override
-    public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player)
+    public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player)
     {
-        return getPickBlock(target, world, x, y, z);
+        return getPickBlock(target, world, pos);
     }
 
     @Override
-    public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
+    public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos)
     {
         ItemStack stack = new ItemStack(CompactStorage.chest, 1);
-        TileEntityChest chest = (TileEntityChest) world.getTileEntity(x, y, z);
+        TileEntityChest chest = (TileEntityChest) world.getTileEntity(pos);
 
         stack.setTagCompound(new NBTTagCompound());
         stack.getTagCompound().setIntArray("size", new int[] {chest.invX, chest.invY});
@@ -197,8 +186,8 @@ public class BlockChest extends Block implements ITileEntityProvider
     }
 
     @Override
-    public Item getItemDropped(int meta, Random rand, int fortune)
+    public Item getItemDropped(IBlockState state, Random rand, int fortune) 
     {
-        return null;
+    	return null;
     }
 }

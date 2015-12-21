@@ -1,7 +1,16 @@
 package com.tattyseal.compactstorage.client.gui;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+
+import org.lwjgl.opengl.GL11;
+
+import com.tattyseal.compactstorage.api.IChest;
+import com.tattyseal.compactstorage.client.gui.tab.ChestInventoryTab;
+import com.tattyseal.compactstorage.client.gui.tab.ChestSettingsTab;
+import com.tattyseal.compactstorage.client.gui.tab.ITab;
+import com.tattyseal.compactstorage.util.RenderUtil;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -11,16 +20,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
-
-import org.lwjgl.opengl.GL11;
-
-import com.tattyseal.compactstorage.api.IChest;
-import com.tattyseal.compactstorage.client.gui.tab.ChestInventoryTab;
-import com.tattyseal.compactstorage.client.gui.tab.ChestSettingsTab;
-import com.tattyseal.compactstorage.client.gui.tab.ITab;
-import com.tattyseal.compactstorage.util.BlockPos;
-import com.tattyseal.compactstorage.util.RenderUtil;
 
 /**
  * Created by Toby on 09/11/2014.
@@ -138,20 +139,46 @@ public class GuiChest extends GuiContainer
     	}
     	
     	activeTab.mouseClicked(x, y, b);
-    	super.mouseClicked(x, y, b);
+    	
+    	try 
+    	{
+			super.mouseClicked(x, y, b);
+		} 
+    	catch (IOException e) 
+    	{
+			e.printStackTrace();
+		}
     }
     
     @Override
-    protected void keyTyped(char c, int id) 
+    protected void keyTyped(char c, int id)
     {
-    	if(!activeTab.areTextboxesInFocus()) super.keyTyped(c, id);
+    	if(!activeTab.areTextboxesInFocus())
+		{
+    		try
+    		{
+        		super.keyTyped(c, id);
+    		}
+    		catch(IOException ex)
+    		{
+    			ex.printStackTrace();
+    		}
+		}
     	activeTab.keyTyped(c, id);
     }
     
     @Override
     protected void actionPerformed(GuiButton button) 
     {
-    	super.actionPerformed(button);
+    	try 
+    	{
+			super.actionPerformed(button);
+		} 
+    	catch (IOException e) 
+    	{
+			e.printStackTrace();
+		}
+    	
     	activeTab.buttonClicked(button);
     }
 

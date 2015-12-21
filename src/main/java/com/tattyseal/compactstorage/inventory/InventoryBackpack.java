@@ -6,9 +6,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTTagString;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.IChatComponent;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -120,18 +120,6 @@ public class InventoryBackpack implements IChest
     }
 
     @Override
-    public String getInventoryName()
-    {
-        return "backpack.inv";
-    }
-
-    @Override
-    public boolean hasCustomInventoryName()
-    {
-        return false;
-    }
-
-    @Override
     public int getInventoryStackLimit()
     {
         return 64;
@@ -150,10 +138,10 @@ public class InventoryBackpack implements IChest
     }
 
     @Override
-    public void openInventory() {}
+    public void openInventory(EntityPlayer player) {}
 
     @Override
-    public void closeInventory()
+    public void closeInventory(EntityPlayer player)
     {
         writeToNBT(stack.getTagCompound());
     }
@@ -243,4 +231,46 @@ public class InventoryBackpack implements IChest
         ItemStack main = new ItemStack(Blocks.wool, oldAll < all ? 0 : all - oldAll / 10, OreDictionary.WILDCARD_VALUE);
         return new ItemStack[] {main.stackSize == 0 ? null : main, null, null};
     }
+
+	@Override
+	public int getField(int id) 
+	{
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) 
+	{
+		
+	}
+
+	@Override
+	public int getFieldCount() 
+	{
+		return 0;
+	}
+
+	@Override
+	public void clear() 
+	{
+		
+	}
+
+	@Override
+	public String getName() 
+	{
+		return "compactChest";
+	}
+
+	@Override
+	public boolean hasCustomName() 
+	{
+		return false;
+	}
+
+	@Override
+	public IChatComponent getDisplayName() 
+	{
+		return new ChatComponentText("Compact Chest");
+	}
 }

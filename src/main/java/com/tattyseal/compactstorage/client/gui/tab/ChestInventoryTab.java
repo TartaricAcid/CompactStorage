@@ -6,8 +6,6 @@ import com.tattyseal.compactstorage.client.gui.slot.SlotMaterial;
 import com.tattyseal.compactstorage.util.RenderUtil;
 
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 public class ChestInventoryTab extends ITab 
@@ -62,8 +60,8 @@ public class ChestInventoryTab extends ITab
 	@Override
 	public void drawForeground(int guiLeft, int guiTop) 
 	{
-        mc.fontRenderer.drawString("Chest (" + invX + "x" + invY + ")", 8, 6, 4210752);
-        mc.fontRenderer.drawString("Inventory", 8, 15 + (invY * 18) + 5, 4210752);
+        mc.fontRendererObj.drawString("Chest (" + invX + "x" + invY + ")", 8, 6, 4210752);
+        mc.fontRendererObj.drawString("Inventory", 8, 15 + (invY * 18) + 5, 4210752);
 	}
 
 	@Override

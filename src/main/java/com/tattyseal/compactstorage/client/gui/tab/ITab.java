@@ -41,7 +41,7 @@ public abstract class ITab
 	{
 		mc.renderEngine.bindTexture(tabTexture);
 		container.drawTexturedModalRect(x, y, 0, (selected ? 30 : 0) + 2, 28, 28);
-		RenderItem.getInstance().renderItemIntoGUI(mc.fontRenderer, mc.renderEngine, item, x + 6, y + 7);
+		mc.getRenderItem().renderItemIntoGUI(item, x + 6, y + 7);
 	}
 	
 	public boolean clickIntersects(int mx, int my)

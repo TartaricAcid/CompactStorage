@@ -5,12 +5,13 @@ import com.tattyseal.compactstorage.tileentity.TileEntityChest;
 import com.tattyseal.compactstorage.util.ChestUtil;
 import com.tattyseal.compactstorage.util.ChestUtil.Type;
 
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class HandlerApplyChestUpdate implements IMessageHandler<PacketApplyChestUpdate, IMessage>
 {
@@ -20,7 +21,7 @@ public class HandlerApplyChestUpdate implements IMessageHandler<PacketApplyChest
 		
 		if(message.type == Type.CHEST)
 		{
-			TileEntityChest chest = (TileEntityChest) ctx.getServerHandler().playerEntity.worldObj.getTileEntity(message.x, message.y, message.z);
+			TileEntityChest chest = (TileEntityChest) ctx.getServerHandler().playerEntity.worldObj.getTileEntity(new BlockPos(message.x, message.y, message.z));
 			
 			chest.setInvX(ChestUtil.clamp(message.invX, 1, 24));
 			chest.setInvY(ChestUtil.clamp(message.invY, 1, 12));

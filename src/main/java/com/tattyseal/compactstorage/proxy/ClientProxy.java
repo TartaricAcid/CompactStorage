@@ -5,9 +5,9 @@ import com.tattyseal.compactstorage.client.render.ChestItemRenderer;
 import com.tattyseal.compactstorage.client.render.TileEntityChestRenderer;
 import com.tattyseal.compactstorage.tileentity.TileEntityChest;
 
-import cpw.mods.fml.client.registry.ClientRegistry;
 import net.minecraft.item.ItemBlock;
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 
 /**
  * Created by Toby on 06/11/2014.

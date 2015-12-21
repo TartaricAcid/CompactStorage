@@ -2,7 +2,6 @@ package com.tattyseal.compactstorage.tileentity;
 
 import java.util.Arrays;
 
-import com.tattyseal.compactstorage.ConfigurationHandler;
 import com.tattyseal.compactstorage.api.IChest;
 
 import net.minecraft.entity.item.EntityItem;
@@ -16,16 +15,17 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IChatComponent;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.oredict.OreDictionary;
 
 /**
  * Created by Toby on 06/11/2014.
  */
 public class TileEntityChest extends TileEntity implements IInventory, IChest
 {
-    public ForgeDirection direction;
+    public EnumFacing direction;
 
     public int color;
     public int invX;
@@ -39,7 +39,7 @@ public class TileEntityChest extends TileEntity implements IInventory, IChest
     {
         super();
 
-        this.direction = ForgeDirection.NORTH;
+        this.direction = EnumFacing.NORTH;
         this.items = new ItemStack[getSizeInventory()];
     }
 
@@ -104,13 +104,13 @@ public class TileEntityChest extends TileEntity implements IInventory, IChest
     }
 
     @Override
-    public String getInventoryName()
+    public String getName()
     {
         return "compactChest.inv";
     }
 
     @Override
-    public boolean hasCustomInventoryName()
+    public boolean hasCustomName()
     {
         return false;
     }
@@ -128,10 +128,10 @@ public class TileEntityChest extends TileEntity implements IInventory, IChest
     }
 
     @Override
-    public void openInventory() {}
+    public void openInventory(EntityPlayer player) {}
 
     @Override
-    public void closeInventory() {}
+    public void closeInventory(EntityPlayer player) {}
 
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack)
@@ -148,12 +148,12 @@ public class TileEntityChest extends TileEntity implements IInventory, IChest
         {
         	for(int i = getSizeInventory() - 3; i < items.length; i++)
         	{
-        		if(items[i] != null) worldObj.spawnEntityInWorld(new EntityItem(worldObj, xCoord, yCoord + 1f, zCoord, items[i].copy()));
+        		if(items[i] != null) worldObj.spawnEntityInWorld(new EntityItem(worldObj, pos.getX(), pos.getY() + 1f, pos.getZ(), items[i].copy()));
         		items[i] = null;
         	}
         }
 
-        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        worldObj.markBlockForUpdate(pos);
     }
 
     /* CUSTOM START */
@@ -163,7 +163,7 @@ public class TileEntityChest extends TileEntity implements IInventory, IChest
     {
         super.readFromNBT(tag);
 
-        if(tag.hasKey("facing")) this.direction = ForgeDirection.getOrientation(tag.getInteger("facing"));
+        if(tag.hasKey("facing")) this.direction = EnumFacing.getFront(tag.getInteger("facing"));
 
         this.color = tag.getInteger("color");
         this.invX = tag.getInteger("invX");
@@ -216,23 +216,17 @@ public class TileEntityChest extends TileEntity implements IInventory, IChest
         NBTTagCompound tag = new NBTTagCompound();
         writeToNBT(tag);
 
-        return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, getBlockMetadata(), tag);
-    }
-
-    @Override
-    public void updateEntity()
-    {
-    	super.updateEntity();
+        return new S35PacketUpdateTileEntity(pos, getBlockMetadata(), tag);
     }
 
     @Override
     public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt)
     {
         super.onDataPacket(net, pkt);
-        readFromNBT(pkt.func_148857_g());
+        readFromNBT(pkt.getNbtCompound());
     }
 
-    public void setDirection(ForgeDirection direction)
+    public void setDirection(EnumFacing direction)
     {
         this.direction = direction;
         markDirty();
@@ -240,14 +234,14 @@ public class TileEntityChest extends TileEntity implements IInventory, IChest
 
     public void setDirection(int direction)
     {
-        this.direction = ForgeDirection.getOrientation(direction);
+        this.direction = EnumFacing.getFront(direction);
         markDirty();
     }
 
     public void updateBlock()
     {
     	items = Arrays.copyOf(items, getSizeInventory());
-    	worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+    	worldObj.markBlockForUpdate(pos);
     }
 
     @Override
@@ -309,4 +303,34 @@ public class TileEntityChest extends TileEntity implements IInventory, IChest
         ItemStack main = new ItemStack(Blocks.chest, oldAll > all ? 0 : (all - oldAll) / 10);
         return new ItemStack[] {main.stackSize == 0 ? null : main, null, null};
     }
+
+	@Override
+	public IChatComponent getDisplayName() {
+		// TODO Auto-generated method stub
+		return new ChatComponentText("Compact Chest");
+	}
+
+	@Override
+	public int getField(int id) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int getFieldCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void clear() {
+		// TODO Auto-generated method stub
+		
+	}
 }

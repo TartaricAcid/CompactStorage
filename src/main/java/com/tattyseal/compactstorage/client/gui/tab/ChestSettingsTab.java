@@ -1,5 +1,7 @@
 package com.tattyseal.compactstorage.client.gui.tab;
 
+import org.lwjgl.opengl.GL11;
+
 import com.tattyseal.compactstorage.CompactStorage;
 import com.tattyseal.compactstorage.client.gui.GuiChest;
 import com.tattyseal.compactstorage.client.gui.slot.SlotChangePosition;
@@ -8,15 +10,13 @@ import com.tattyseal.compactstorage.inventory.InventoryBackpack;
 import com.tattyseal.compactstorage.network.PacketApplyChestUpdate;
 import com.tattyseal.compactstorage.util.ChestUtil;
 import com.tattyseal.compactstorage.util.ChestUtil.Type;
-
 import com.tattyseal.compactstorage.util.RenderUtil;
+
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import org.lwjgl.opengl.GL11;
 
 public class ChestSettingsTab extends ITab 
 {
@@ -51,8 +51,8 @@ public class ChestSettingsTab extends ITab
 		this.minusZ = new GuiButton(3, bpxm, chest.getGuiTop() + 33, 20, 20, "-");
 		this.apply = new GuiButton(4, bpxm + 25 + ((18 * 3) / 2), chest.getGuiTop() + 58, (Math.max(9, invX) * 18) - 49, 20, "Apply Changes");
 
-		this.xField = new GuiTextField(mc.fontRenderer, bpxm + 25, chest.getGuiTop() + 8, (Math.max(9, invX) * 18) - 49, 20);
-		this.zField = new GuiTextField(mc.fontRenderer, bpxm + 25, chest.getGuiTop() + 33, (Math.max(9, invX) * 18) - 49, 20);
+		this.xField = new GuiTextField(0, mc.fontRendererObj, bpxm + 25, chest.getGuiTop() + 8, (Math.max(9, invX) * 18) - 49, 20);
+		this.zField = new GuiTextField(1, mc.fontRendererObj, bpxm + 25, chest.getGuiTop() + 33, (Math.max(9, invX) * 18) - 49, 20);
 	
 		this.xField.setEnabled(false);
 		this.zField.setEnabled(false);
@@ -125,21 +125,21 @@ public class ChestSettingsTab extends ITab
 
 			if(stack != null)
 			{
-				RenderItem.getInstance().renderItemIntoGUI(mc.fontRenderer, mc.renderEngine, stack, guiLeft + 4 + (i * 18) + 1, guiTop + 59);
+				mc.getRenderItem().renderItemIntoGUI(stack, guiLeft + 4 + (i * 18) + 1, guiTop + 59);
 
 				GL11.glDisable(GL11.GL_LIGHTING);
 				GL11.glDisable(GL11.GL_DEPTH_TEST);
 				GL11.glDisable(GL11.GL_BLEND);
 				GL11.glPushMatrix();
 				GL11.glScalef(.75f, .75f, .75f);
-				mc.fontRenderer.drawString(stack.stackSize + "", (int)  ((guiLeft + 4 + (i * 18) + ((18 / 2) - (mc.fontRenderer.getStringWidth(stack.stackSize + "") / 2))) * 1.35f), (int) ((guiTop + 59 + ((18 / 2) - (mc.fontRenderer.FONT_HEIGHT / 2))) * 1.35f), 0xFFFFFF);
+				mc.fontRendererObj.drawString(stack.stackSize + "", (int)  ((guiLeft + 4 + (i * 18) + ((18 / 2) - (mc.fontRendererObj.getStringWidth(stack.stackSize + "") / 2))) * 1.35f), (int) ((guiTop + 59 + ((18 / 2) - (mc.fontRendererObj.FONT_HEIGHT / 2))) * 1.35f), 0xFFFFFF);
 				GL11.glPopMatrix();
 				GL11.glEnable(GL11.GL_BLEND);
 				GL11.glEnable(GL11.GL_DEPTH_TEST);
 			}
 			else
 			{
-				mc.fontRenderer.drawString("X", guiLeft + 4 + (i * 18) + ((18 / 2) - (mc.fontRenderer.getStringWidth("X") / 2)), guiTop + 59 + ((18 / 2) - (mc.fontRenderer.FONT_HEIGHT / 2)), 0xFF0000);
+				mc.fontRendererObj.drawString("X", guiLeft + 4 + (i * 18) + ((18 / 2) - (mc.fontRendererObj.getStringWidth("X") / 2)), guiTop + 59 + ((18 / 2) - (mc.fontRendererObj.FONT_HEIGHT / 2)), 0xFF0000);
 			}
 		}
 

@@ -3,14 +3,14 @@ package com.tattyseal.compactstorage.command;
 import java.util.Arrays;
 import java.util.List;
 
-import net.minecraft.command.ICommand;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatComponentTranslation;
-
 import com.tattyseal.compactstorage.ConfigurationHandler;
 
-import cpw.mods.fml.common.Loader;
+import net.minecraft.command.ICommand;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraftforge.fml.common.Loader;
 
 /**
  * Created by Toby on 11/02/2015.
@@ -18,7 +18,7 @@ import cpw.mods.fml.common.Loader;
 public class CommandCompactStorage implements ICommand
 {
     @Override
-    public String getCommandName()
+    public String getName()
     {
         return "cs";
     }
@@ -30,13 +30,13 @@ public class CommandCompactStorage implements ICommand
     }
 
     @Override
-    public List getCommandAliases()
+    public List getAliases()
     {
         return Arrays.asList("compactstorage");
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] args)
+    public void execute(ICommandSender sender, String[] args)
     {
         if(args.length > 0)
         {
@@ -61,15 +61,15 @@ public class CommandCompactStorage implements ICommand
             sender.addChatMessage(new ChatComponentTranslation(getCommandUsage(sender)));
         }
     }
-
+    
     @Override
-    public boolean canCommandSenderUseCommand(ICommandSender p_71519_1_)
+    public boolean canCommandSenderUse(ICommandSender p_71519_1_)
     {
         return true;
     }
-
+    
     @Override
-    public List addTabCompletionOptions(ICommandSender p_71516_1_, String[] p_71516_2_) {
+    public List addTabCompletionOptions(ICommandSender p_71516_1_, String[] p_71516_2_, BlockPos pos) {
         return p_71516_2_.length == 1 ? Arrays.asList("reload", "version") : null;
     }
 

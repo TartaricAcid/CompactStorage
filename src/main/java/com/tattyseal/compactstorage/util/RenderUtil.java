@@ -3,6 +3,7 @@ package com.tattyseal.compactstorage.util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.util.ResourceLocation;
 
 public class RenderUtil 
@@ -27,12 +28,14 @@ public class RenderUtil
 		double ux = (1D / slotTextureWidth) * realWidth;
 		double uz = (1D / slotTextureHeight) * realHeight;
 		
-        Tessellator tessellator = Tessellator.instance;
-        tessellator.startDrawingQuads();
-        tessellator.addVertexWithUV(x + 0, y + realHeight, 0, 0, uz);//(1 / slotTextureHeight) * (height));
-        tessellator.addVertexWithUV(x + realWidth, y + realHeight, 0, ux, uz);//(1 / slotTextureWidth) * (width), (1 / slotTextureHeight) * (height));
-        tessellator.addVertexWithUV(x + realWidth, y + 0, 0, ux, 0);//1 / slotTextureWidth) * (width), 0);
-        tessellator.addVertexWithUV(x + 0, y + 0, 0, 0, 0);
+		Tessellator tessellator = Tessellator.getInstance();
+        WorldRenderer worldRenderer = tessellator.getWorldRenderer();
+        
+        worldRenderer.startDrawingQuads();
+        worldRenderer.addVertexWithUV(x + 0, y + realHeight, 0, 0, uz);//(1 / slotTextureHeight) * (height));
+        worldRenderer.addVertexWithUV(x + realWidth, y + realHeight, 0, ux, uz);//(1 / slotTextureWidth) * (width), (1 / slotTextureHeight) * (height));
+        worldRenderer.addVertexWithUV(x + realWidth, y + 0, 0, ux, 0);//1 / slotTextureWidth) * (width), 0);
+        worldRenderer.addVertexWithUV(x + 0, y + 0, 0, 0, 0);
         tessellator.draw();
 	}
     
@@ -66,13 +69,14 @@ public class RenderUtil
     
     private static void renderPartBackground(int x, int y, int startX, int startY, int endX, int endY, int width, int height)
     {
-        Tessellator tessellator = Tessellator.instance;
-        tessellator.startDrawingQuads();
+        Tessellator tessellator = Tessellator.getInstance();
+        WorldRenderer worldRenderer = tessellator.getWorldRenderer();
+        worldRenderer.startDrawingQuads();
         
-        tessellator.addVertexWithUV(x, y + height, 0, getEnd(chestTextureWidth, startX), getEnd(chestTextureHeight, endY));
-        tessellator.addVertexWithUV(x + width, y + height, 0, getEnd(chestTextureWidth, endX), getEnd(chestTextureHeight, endY));
-        tessellator.addVertexWithUV(x + width, y + 0, 0, getEnd(chestTextureWidth, endX), getEnd(chestTextureHeight, startY));
-        tessellator.addVertexWithUV(x, y, 0, getEnd(chestTextureWidth, startX), getEnd(chestTextureHeight, startY));
+        worldRenderer.addVertexWithUV(x, y + height, 0, getEnd(chestTextureWidth, startX), getEnd(chestTextureHeight, endY));
+        worldRenderer.addVertexWithUV(x + width, y + height, 0, getEnd(chestTextureWidth, endX), getEnd(chestTextureHeight, endY));
+        worldRenderer.addVertexWithUV(x + width, y + 0, 0, getEnd(chestTextureWidth, endX), getEnd(chestTextureHeight, startY));
+        worldRenderer.addVertexWithUV(x, y, 0, getEnd(chestTextureWidth, startX), getEnd(chestTextureHeight, startY));
         
         tessellator.draw();
     }
@@ -84,12 +88,13 @@ public class RenderUtil
 
     public static void drawTexturedQuadFit(double x, double y, double width, double height, double zLevel)
     {
-        Tessellator tessellator = Tessellator.instance;
-        tessellator.startDrawingQuads();
-        tessellator.addVertexWithUV(x + 0, y + height, zLevel, 0,1);
-        tessellator.addVertexWithUV(x + width, y + height, zLevel, 1, 1);
-        tessellator.addVertexWithUV(x + width, y + 0, zLevel, 1,0);
-        tessellator.addVertexWithUV(x + 0, y + 0, zLevel, 0, 0);
+        Tessellator tessellator = Tessellator.getInstance();
+        WorldRenderer worldRenderer = tessellator.getWorldRenderer();
+        worldRenderer.startDrawingQuads();
+        worldRenderer.addVertexWithUV(x + 0, y + height, zLevel, 0,1);
+        worldRenderer.addVertexWithUV(x + width, y + height, zLevel, 1, 1);
+        worldRenderer.addVertexWithUV(x + width, y + 0, zLevel, 1,0);
+        worldRenderer.addVertexWithUV(x + 0, y + 0, zLevel, 0, 0);
         tessellator.draw();
     }
 }
