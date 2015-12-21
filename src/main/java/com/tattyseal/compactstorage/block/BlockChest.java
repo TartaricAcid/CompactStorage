@@ -42,15 +42,21 @@ public class BlockChest extends Block implements ITileEntityProvider
         setHarvestLevel("axe", 1);
         setBlockBounds(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
     }
-
+    
     @Override
-    public int getRenderType()
+    public int getRenderType() 
     {
-        return -1;
+    	return -1;
+    }
+    
+    @Override
+    public boolean isOpaqueCube()
+    {
+        return false;
     }
 
     @Override
-    public boolean isOpaqueCube()
+    public boolean isFullCube()
     {
         return false;
     }
