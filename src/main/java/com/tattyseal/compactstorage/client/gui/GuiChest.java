@@ -10,11 +10,14 @@ import com.tattyseal.compactstorage.api.IChest;
 import com.tattyseal.compactstorage.client.gui.tab.ChestInventoryTab;
 import com.tattyseal.compactstorage.client.gui.tab.ChestSettingsTab;
 import com.tattyseal.compactstorage.client.gui.tab.ITab;
+import com.tattyseal.compactstorage.inventory.InventoryBackpack;
 import com.tattyseal.compactstorage.util.RenderUtil;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -40,6 +43,9 @@ public class GuiChest extends GuiContainer
     public ITab[] tabs;
     public ITab activeTab;
     
+    public KeyBinding[] HOTBAR;
+    public int backpackSlot;
+    
     public GuiChest(Container container, IChest chest, World world, EntityPlayer player, BlockPos pos)
     {
         super(container);
@@ -55,6 +61,14 @@ public class GuiChest extends GuiContainer
 
         this.xSize = 7 + (Math.max(9, invX) * 18) + 7;
         this.ySize = 15 + (invY * 18) + 13 + 54 + 4 + 18 + 7;
+        this.HOTBAR = Minecraft.getMinecraft().gameSettings.keyBindsHotbar;
+        
+        backpackSlot = -1;
+        
+        if(chest instanceof InventoryBackpack)
+        {
+        	backpackSlot = player.inventory.currentItem;
+        }
     }
     
     @Override
@@ -153,6 +167,11 @@ public class GuiChest extends GuiContainer
     @Override
     protected void keyTyped(char c, int id)
     {
+    	if (backpackSlot != -1 && HOTBAR[backpackSlot].getKeyCode() == id) 
+        {
+            return;
+        }
+    	
     	if(!activeTab.areTextboxesInFocus())
 		{
     		try

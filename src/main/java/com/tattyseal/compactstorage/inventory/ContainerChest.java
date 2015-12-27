@@ -33,10 +33,21 @@ public class ContainerChest extends Container
     public int xSize;
     public int ySize;
     
+    public int backpackSlot;
+    
     public ContainerChest(World world, IChest chest, EntityPlayer player, BlockPos pos)
     {
         super();
-
+        
+        if(chest instanceof InventoryBackpack)
+        {
+        	backpackSlot = player.inventory.currentItem;
+        }
+        else
+        {
+        	backpackSlot = -1;
+        }
+        
         this.world = world;
         this.player = player;
         this.pos = pos;
@@ -98,7 +109,14 @@ public class ContainerChest extends Container
 
         for(int x = 0; x < 9; x++)
         {
-        	Slot slot = new SlotChangePosition(player.inventory, x, slotX + (x * 18), slotY);
+        	boolean immovable = false;
+        	
+        	if(backpackSlot != -1 && backpackSlot == x)
+        	{
+        		immovable = true;
+        	}
+        	
+        	Slot slot = new SlotChangePosition(player.inventory, x, slotX + (x * 18), slotY, immovable);
             addSlotToContainer(slot);
         }
     }
