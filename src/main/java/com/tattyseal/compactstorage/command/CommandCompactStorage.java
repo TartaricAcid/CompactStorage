@@ -18,7 +18,7 @@ import net.minecraftforge.fml.common.Loader;
 public class CommandCompactStorage implements ICommand
 {
     @Override
-    public String getName()
+    public String getCommandName()
     {
         return "cs";
     }
@@ -30,13 +30,15 @@ public class CommandCompactStorage implements ICommand
     }
 
     @Override
-    public List getAliases()
+    public List getCommandAliases()
     {
         return Arrays.asList("compactstorage");
     }
+    
+    
 
     @Override
-    public void execute(ICommandSender sender, String[] args)
+    public void processCommand(ICommandSender sender, String[] args)
     {
         if(args.length > 0)
         {
@@ -63,7 +65,7 @@ public class CommandCompactStorage implements ICommand
     }
     
     @Override
-    public boolean canCommandSenderUse(ICommandSender p_71519_1_)
+    public boolean canCommandSenderUseCommand(ICommandSender p_71519_1_)
     {
         return true;
     }
@@ -77,9 +79,9 @@ public class CommandCompactStorage implements ICommand
     public boolean isUsernameIndex(String[] p_82358_1_, int p_82358_2_) {
         return false;
     }
-
+    
     @Override
-    public int compareTo(Object o) {
+    public int compareTo(ICommand o) {
         return 0;
     }
 }

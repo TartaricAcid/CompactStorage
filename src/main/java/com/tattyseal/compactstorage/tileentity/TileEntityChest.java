@@ -87,11 +87,14 @@ public class TileEntityChest extends TileEntity implements IInventory, IChest
         return stack;
     }
 
-    @Override
-    public ItemStack getStackInSlotOnClosing(int slot)
-    {
-        return getStackInSlot(slot);
-    }
+	@Override
+	public ItemStack removeStackFromSlot(int slot) 
+	{
+		if(slot < items.length)
+			items[slot] = null;
+		
+		return null;
+	}
 
     @Override
     public void setInventorySlotContents(int slot, ItemStack stack)

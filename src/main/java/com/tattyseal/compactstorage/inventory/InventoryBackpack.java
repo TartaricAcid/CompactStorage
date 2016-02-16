@@ -102,13 +102,7 @@ public class InventoryBackpack implements IChest
 
         return stack;
     }
-
-    @Override
-    public ItemStack getStackInSlotOnClosing(int slot)
-    {
-        return getStackInSlot(slot);
-    }
-
+    
     @Override
     public void setInventorySlotContents(int slot, ItemStack stack)
     {
@@ -272,5 +266,14 @@ public class InventoryBackpack implements IChest
 	public IChatComponent getDisplayName() 
 	{
 		return new ChatComponentText("Compact Chest");
+	}
+
+	@Override
+	public ItemStack removeStackFromSlot(int slot) 
+	{
+		if(slot < items.length)
+			items[slot] = null;
+		
+		return null;
 	}
 }

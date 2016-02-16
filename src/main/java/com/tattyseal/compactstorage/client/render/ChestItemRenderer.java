@@ -6,14 +6,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer;
+//import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 
 /**
  * Created by Toby on 10/02/2015.
  */
-public class ChestItemRenderer implements IItemRenderer
-{
+public class ChestItemRenderer// implements IItemRenderer
+{/*
     public ModelChest modelChest;
     public static final ResourceLocation texture = new ResourceLocation("compactstorage", "textures/models/chest.png");
 
@@ -93,5 +93,5 @@ public class ChestItemRenderer implements IItemRenderer
 
         Minecraft.getMinecraft().renderEngine.bindTexture(texture);
         modelChest.renderAll();
-    }
+    }*/
 }
